@@ -13,26 +13,50 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background: linear-gradient(to bottom, #FFC107, #e9ecef); /* Degradê axixá */
+            background: linear-gradient(to bottom, #FFC107, #e9ecef);
             margin: 0;
+        }
+
+        .phone {
+            width: 360px;
+            height: 640px;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8NRSvcq4spdCeMcXG49nHrbnx3GJBc-uUMqG8XPVcExUx_N83wwchL18&s=10') no-repeat center center;
+            background-size: cover;
+            border-radius: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone::before {
+            content: "";
+            width: 60px;
+            height: 5px;
+            background-color: #333;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
         }
 
         h1 {
             color: #343a40;
             font-weight: 500;
             margin-bottom: 20px;
-            font-size: 2.5em; /* Tamanho maior */
+            font-size: 2em;
         }
 
         .container {
-            background-color: #ffffff;
-            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
-            max-width: 90%;
-            width: 400px;
-            animation: fadeInUp 0.8s ease-out; /* Animação em todos os containers */
+            width: 100%;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         p {
@@ -78,54 +102,55 @@
             text-decoration: underline;
         }
 
-        /* Estilo axixá */
         .axixa-style {
             font-size: 1.2em;
             font-weight: bold;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="axixa-style">Mototáxi Axixá</h1>
-        <p>Escolha como você quer usar o serviço, meu rei:</p>
-        <button onclick="window.location.href='#passageiro'">Passageiro</button>
-        <button onclick="window.location.href='#mototaxista'">Mototaxista</button>
-    </div>
+    <div class="phone">
+        <div class="container" id="home">
+            <h1 class="axixa-style">Mototáxi Axixá</h1>
+            <p>Escolha como você quer usar o serviço, meu rei:</p>
+            <button onclick="showSection('passageiro')">Passageiro</button>
+            <button onclick="showSection('mototaxista')">Mototaxista</button>
+        </div>
 
-    <div id="passageiro" style="display: none;" class="container">
-        <h2 class="axixa-style">Passageiro</h2>
-        <p>Peça um mototáxi com a rapidez de um raio e a segurança de um cofre!</p>
-        <div id="passageiro-telegram-info">
-            <p>Para usar o serviço, você precisa ter o Telegram instalado, viu?</p>
-            <button onclick="abrirTelegram('http://t.me/Miaxixa_bot')">Chamar Mototáxi</button>
-            <p id="passageiro-download-info"></p>
+        <div id="passageiro" class="container hidden">
+            <h2 class="axixa-style">Passageiro</h2>
+            <p>Peça um mototáxi com a rapidez de um raio e a segurança de um cofre!</p>
+            <div id="passageiro-telegram-info">
+                <p>Para usar o serviço, você precisa ter o Telegram instalado, viu?</p>
+                <button onclick="abrirTelegram('http://t.me/Miaxixa_bot')">Chamar Mototáxi</button>
+                <p id="passageiro-download-info"></p>
+            </div>
+            <button onclick="showSection('home')">Voltar</button>
+        </div>
+
+        <div id="mototaxista" class="container hidden">
+            <h2 class="axixa-style">Mototaxista</h2>
+            <p>Aumente suas corridas mais que pipoca na panela com nosso sistema!</p>
+            <div id="mototaxista-telegram-info">
+                <p>Para usar o serviço, você precisa ter o Telegram instalado, tá ligado?</p>
+                <button onclick="abrirTelegram('https://t.me/+18h9EXArX_g5ZWUx')">Entrar no Grupo</button>
+                <p id="mototaxista-download-info"></p>
+            </div>
+            <button onclick="showSection('home')">Voltar</button>
         </div>
     </div>
 
-    <div id="mototaxista" style="display: none;" class="container">
-        <h2 class="axixa-style">Mototaxista</h2>
-        <p>Aumente suas corridas mais que pipoca na panela com nosso sistema!</p>
-        <div id="mototaxista-telegram-info">
-            <p>Para usar o serviço, você precisa ter o Telegram instalado, tá ligado?</p>
-            <button onclick="abrirTelegram('https://t.me/+18h9EXArX_g5ZWUx')">Entrar no Grupo</button>
-            <p id="mototaxista-download-info"></p>
-        </div>
-    </div>
-
-     <script>
-        const passageiroBtn = document.querySelector('button[onclick="window.location.href=\'#passageiro\'"]');
-        const mototaxistaBtn = document.querySelector('button[onclick="window.location.href=\'#mototaxista\'"]');
-
-        passageiroBtn.addEventListener('click', () => {
-            document.querySelector('#passageiro').style.display = 'block';
-            document.querySelector('.container:first-of-type').style.display = 'none';
-        });
-
-        mototaxistaBtn.addEventListener('click', () => {
-            document.querySelector('#mototaxista').style.display = 'block';
-            document.querySelector('.container:first-of-type').style.display = 'none';
-        });
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.container').forEach(container => {
+                container.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
 
         function abrirTelegram(link) {
             if (isMobile()) {
