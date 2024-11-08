@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mini App Mapa</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* CSS embutido */
+    #map {
+      height: 400px; 
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    // JavaScript embutido
+    let telegram;
+    let origem, destino;
+
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: -23.550520, lng: -46.633308 }, 
+        zoom: 10,
+      });
+
+      map.addListener("click", (event) => {
+        if (!origem) {
+          origem = event.latLng;
+          addMarker(origem, map, "Origem");
+        } else if (!destino) {
+          destino = event.latLng;
+          addMarker(destino, map, "Destino");
+          // Envia os dados para o bot
+          if (telegram) {
+            telegram.sendData(JSON.stringify({ origem: origem.toJSON(), destino: destino.toJSON() }));
+          } else {
+            console.error("Telegram API não disponível.");
+          }
+        }
+      });
+
+      // Inicializa a API do Telegram Web Apps
+      if (window.Telegram) {
+        telegram = window.Telegram.WebApp;
+        telegram.expand(); 
+      } else {
+        console.error("Telegram API não disponível.");
+      }
+    }
+
+    function addMarker(location, map, title) {
+      new google.maps.Marker({
+        position: location,
+        map: map,
+        title: title,
+      });
+    }
+
+    window.initMap = initMap;
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATYLPsPRh0u9HV7smMRVWWFlR767ak7qs&libraries=places&callback=initMap" async defer></script>
+</body>
+</html>
